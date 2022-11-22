@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "739761904493",
+    "project_id": "trial-app-6d0cb",
+    "storage_bucket": "trial-app-6d0cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739761904493:android:767b896808da536a949864",
+        "android_client_info": {
+          "package_name": "com.evelyne.labs.trialapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739761904493-7dn5r8o2fk2ip3guheqv9un9jfsj8v84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYefNySiuETbSaYgh7mZdnUlXe9OAzCxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739761904493-7dn5r8o2fk2ip3guheqv9un9jfsj8v84.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

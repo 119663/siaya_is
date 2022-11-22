@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".fragments.UploadFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".serviceprovider.UploadImages">
+
+        <TextView
+            android:id="@+id/uploadText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="Upload Image and Description"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/chooseFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadText"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="-2dp"
+            android:layout_marginTop="24dp"
+            android:text="Choose File" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageview"
+            android:layout_alignParentStart="true"
+            android:height="40dp"
+            android:layout_marginStart="-2dp"
+            android:layout_marginTop="25dp"
+            android:hint="Company Name"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            />
+        <EditText
+            android:id="@+id/cap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description"
+            android:layout_alignParentStart="true"
+            android:height="40dp"
+            android:layout_marginStart="-2dp"
+            android:layout_marginTop="25dp"
+            android:hint="Capacity"
+            android:inputType="number"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            />
+        <EditText
+            android:id="@+id/noplate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cap"
+            android:layout_alignParentStart="true"
+            android:height="40dp"
+            android:layout_marginStart="-2dp"
+            android:layout_marginTop="25dp"
+            android:hint="Number Plate"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            />
+        <EditText
+            android:id="@+id/prices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/noplate"
+            android:layout_alignParentStart="true"
+            android:height="40dp"
+            android:layout_marginStart="-2dp"
+            android:layout_marginTop="25dp"
+            android:hint="Price"
+            android:inputType="number"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            />
+
+        <ImageView
+            android:id="@+id/imageview"
+            android:layout_width="500dp"
+            android:layout_height="150dp"
+            android:layout_below="@id/chooseFile"
+            android:layout="@id/upload"
+            />
+
+        <Button
+            android:id="@+id/upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/prices"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
+            android:text="Upload" />
+
+        <TextView
+            android:id="@+id/showUploads"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/upload"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:text="Show Uploads"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <ProgressBar
+            android:id="@+id/progressBarUpload"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="175dp"
+            android:layout_marginBottom="36dp"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+    </ScrollView>
+</FrameLayout>
