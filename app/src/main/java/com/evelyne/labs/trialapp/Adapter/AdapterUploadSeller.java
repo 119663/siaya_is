@@ -38,7 +38,7 @@ public class AdapterUploadSeller extends RecyclerView.Adapter<AdapterUploadSelle
     @Override
     public void onBindViewHolder(@NonNull HolderUploadSeller holder, int position) {
 
-        //get data
+        //get   data
         Upload upload= uploadList.get(position);
         String id = upload.getUploadId();
         String uid= upload.getMuid();
