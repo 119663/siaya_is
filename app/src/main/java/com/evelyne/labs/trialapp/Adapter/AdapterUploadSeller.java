@@ -21,7 +21,7 @@ public class AdapterUploadSeller extends RecyclerView.Adapter<AdapterUploadSelle
     private Context context;
     private ArrayList<Upload> uploadList;
 
-    public AdapterUploadSeller(Context context, ArrayList<Upload> uploadList) {
+    public AdapterUploadSeller(ArrayList<Upload> uploadList) {
         this.context = context;
         this.uploadList = uploadList;
     }
@@ -30,7 +30,7 @@ public class AdapterUploadSeller extends RecyclerView.Adapter<AdapterUploadSelle
     @Override
     public HolderUploadSeller onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //inflate layout
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_show_uploads,parent,false);
+        View view = LayoutInflater.from(/*parent.getContext()*/context).inflate(R.layout.activity_show_uploads,parent,false);
 
         return new HolderUploadSeller(view);
     }

@@ -1,9 +1,11 @@
 package com.evelyne.labs.trialapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.evelyne.labs.trialapp.MapsActivity;
 import com.evelyne.labs.trialapp.R;
+import com.evelyne.labs.trialapp.ShowUploads;
 import com.evelyne.labs.trialapp.eventbus.MyUpdateCartEvent;
 import com.evelyne.labs.trialapp.listeners.ICartLoadListener;
 import com.evelyne.labs.trialapp.listeners.IRecyclerViewListener;
@@ -26,9 +30,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +54,7 @@ private ICartLoadListener iCartLoadListener;
         this.iCartLoadListener = iCartLoadListener;
     }
 
-    public MyBookAdapter(Context context, List<Upload> uploadModelList) {
+    public MyBookAdapter(Context context, List<Upload> uploadList) {
         this.context = context;
         this.uploadList = uploadList;
     }
@@ -58,8 +64,6 @@ private ICartLoadListener iCartLoadListener;
     public MyDrinkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
        return new MyDrinkViewHolder(LayoutInflater.from(context)
                 .inflate(R.layout.booklist,parent,false));
-        // MyDrinkViewHolder v =LayoutInflater.from(context)
-       //.inflate(R.layout.booklist,parent,false);
 
     }
 
@@ -67,44 +71,37 @@ private ICartLoadListener iCartLoadListener;
     public void onBindViewHolder(@NonNull MyDrinkViewHolder holder, int position) {
 
         //Get data
-        final Upload uploadcurrent = uploadList.get(position);
-        String company = uploadcurrent.getMcompany();
-        String capacity = uploadcurrent.getMcapacity();
-        String price = uploadcurrent.getMprice();
-        String plate = uploadcurrent.getMplate();
+        Upload uploadcurrent = uploadList.get(position);
+        String CompanyName = uploadcurrent.getMcompany();
+        String TankCapacity = uploadcurrent.getMcapacity();
+        String ServicePrice = uploadcurrent.getMprice();
+        String NumberPlate = uploadcurrent.getMplate();
         String timestamp = uploadcurrent.getMtimestamp();
+//        String imageUri = uploadcurrent.getMimageUrl();
 
 
         // Set data
 
-        holder.companyname.setText(""+company);
-        holder.capacity.setText("Litres"+capacity);
-        holder.price.setText("Ksh"+price);
-        holder.plate.setText(""+plate);
-
-        // holder.foodItemDate.setText(booking.getPickUpDate());
-        //holder.foodItemNameLocation.setText(booking.getPickUpLocation());
-
+        holder.CompanyName.setText(""+CompanyName);
+        holder.capacity.setText("Litres"+TankCapacity);
+        holder.price.setText("Ksh"+ServicePrice);
+        holder.plate.setText(""+NumberPlate);
         Glide.with(context).load(uploadcurrent.getMimageUrl()).into(holder.imageView);
-       /* final Upload uploads = uploadList.get(position);
-       // Glide.with(context)
-                //.load(uploadList.get(position).getMimageUrl())
-                        //.into(holder.imageView);
-        Glide.with(context)
-                .load(uploads.getMimageUrl())
-                .into(holder.imageView);
-       // holder.price.setText(new StringBuilder("Ksh").append(uploads.getMprice()));
-        holder.price.setText(new StringBuilder("Ksh").append(uploadList.get(position).getMprice()));
-        holder.capacity.setText(new StringBuilder("Litres").append(uploadList.get(position).getMcapacity()));
-        holder.plate.setText(new StringBuilder().append(uploadList.get(position).getMplate()));
-        holder.companyname.setText(new StringBuilder().append(uploadList.get(position).getMcompany()));
-       /* holder.capacity.setText(new StringBuilder("Litres").append(uploads.getMcapacity()));
-        holder.plate.setText(new StringBuilder().append(uploads.getMplate()));
-        holder.companyname.setText(new StringBuilder().append(uploads.getMcompany())); */
-        //for cart
-        holder.setListener((view, adapterPosition) -> {
-            addToCart(uploadList.get(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, MapsActivity.class);
+                context.startActivity(intent);
+            }
         });
+
+
+        //Glide.with(context).load(uploadcurrent.getMimageUrl()).into(holder.imageView);
+
+//        holder.setListener((view, adapterPosition) -> {
+//            addToCart(uploadList.get(position));
+//        });
     }
 
     private void addToCart(Upload upload) {
@@ -112,9 +109,7 @@ private ICartLoadListener iCartLoadListener;
         DatabaseReference userCart = FirebaseDatabase
                 .getInstance().getReference("Users")
                         .child("UNIQUE_USER_ID").child("Cart");
-               // .child("UNIQUE_USER_ID");
 
-       // userCart.child(upload.getMuid())
         userCart.child("Cart").equalTo(firebaseAuth.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -176,33 +171,25 @@ iCartLoadListener.onCartLoadFailure(error.getMessage());
     }
 
     public class MyDrinkViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-      /*  @BindView(R.id.bookImageView)
-        ImageView imageView;
-        @BindView(R.id.descriptionl)
-        TextView companyname;
-        @BindView(R.id.capl)
-        TextView capacity;
-        @BindView(R.id.NoPlatel)
-        TextView plate;
-        @BindView(R.id.Bpricel)
-        TextView price; */
-private TextView  companyname,capacity,plate,price;
-private ImageView imageView;
+    private TextView  CompanyName,capacity,plate,price;
+    private ImageView imageView;
+    private Button bookspl;
         //for cart
         IRecyclerViewListener listener;
 
-        public void setListener(IRecyclerViewListener listener) {
-            this.listener = listener;
-        }
+        //public void setListener(IRecyclerViewListener listener) {
+            //this.listener = listener;
+       // }
 
         private Unbinder unbinder;
         public MyDrinkViewHolder(@NonNull View itemView){
             super(itemView);
             imageView = itemView.findViewById(R.id.bookImageView);
-            companyname = itemView.findViewById(R.id.descriptionl);
+            CompanyName = itemView.findViewById(R.id.descriptionl);
             capacity = itemView.findViewById(R.id.capl);
             plate = itemView.findViewById(R.id.NoPlatel);
             price = itemView.findViewById(R.id.Bpricel);
+            bookspl = itemView.findViewById(R.id.bookspl);
             unbinder = ButterKnife.bind(this,itemView);
             //for cart
             itemView.setOnClickListener(this);
@@ -213,5 +200,6 @@ private ImageView imageView;
         public void onClick(View view) {
             listener.onRecyclerClick(view,getAdapterPosition());
         }
+
     }
 }

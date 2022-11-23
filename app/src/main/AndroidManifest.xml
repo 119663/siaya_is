@@ -19,6 +19,20 @@
         android:theme="@style/Theme.TrialApp"
         tools:targetApi="31">
         <activity
+            android:name=".SpReportsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CustomerOrderDetails"
             android:exported="false">
             <meta-data
@@ -58,13 +72,6 @@
             android:name=".MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
         <activity
             android:name=".spreports.SpReports"
             android:exported="false">

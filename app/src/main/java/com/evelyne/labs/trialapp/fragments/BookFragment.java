@@ -3,6 +3,7 @@ package com.evelyne.labs.trialapp.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import com.evelyne.labs.trialapp.listeners.ICartLoadListener;
 import com.evelyne.labs.trialapp.model.CartModel;
 import com.evelyne.labs.trialapp.model.Upload;
 import com.evelyne.labs.trialapp.utilis.SpaceItemDecoration;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +39,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import org.greenrobot.eventbus.EventBus;
@@ -70,6 +76,7 @@ public class BookFragment extends Fragment implements IBookLoadListener, ICartLo
 
     private MyBookAdapter adapter;
     private ArrayList<Upload> uploadList;
+    private FirebaseFirestore db;
 
  ICartLoadListener cartLoadListener;
  IBookLoadListener bookLoadListener;
@@ -114,42 +121,102 @@ public class BookFragment extends Fragment implements IBookLoadListener, ICartLo
         // of our Firebase database.
         firebaseDatabase = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        //uploadList = new ArrayList<>();
+//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Providers");
+//        reference.child(mAuth.getUid()).child("uploads").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                uploadList.clear();
+//                for (DataSnapshot ds: snapshot.getChildren()){
+//                    Upload upload = ds.getValue(Upload.class);
+//
+//                    uploadList.add(upload);
+//                }
+//                adapter = new MyBookAdapter(getActivity(),uploadList);
+//                recview.setAdapter(adapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(getContext(),"errror",Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
 
-        uploadList = new ArrayList<>();
-        // init();
          loadUploadFromFirebase();
-         countCartItem();
+        // countCartItem();
          initializ();
           return root;
-        //return null;
     }
 
 
     private void loadUploadFromFirebase() {
+
+        db.collection("Services")
+                .document(mAuth.getCurrentUser().getUid())
+                .collection("my_services")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            uploadList = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                Upload uploads = document.toObject(Upload.class);
+                                System.out.println(uploads.getMcompany());
+                                //uploads.setKey(uploadSnapshot.getKey());
+                                uploadList.add(uploads);
+                            }
+                            adapter = new MyBookAdapter(getContext(),uploadList);
+                            LinearLayoutManager llm = new LinearLayoutManager(getContext());
+                            llm.setOrientation(LinearLayoutManager.VERTICAL);
+                            recview.setLayoutManager(llm);
+                            recview.setAdapter(adapter);
+
+//                          bookLoadListener.onUploadLoadSuccess(uploadList);
+                        }else
+                            bookLoadListener.onUploadLoadFailure("Cant find uploads");
+
+                    }
+                });
+
+
+
+
+
+
         //List<Upload> uploadss = new ArrayList<>();
        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Providers");
-        reference.child(mAuth.getUid()).child("uploads")
+        reference.orderByChild("uploads")
        // FirebaseDatabase.getInstance()
                 //getReference("uploads")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        uploadList = new ArrayList<>();
                       if(snapshot.exists())
+
                       {
                           for(DataSnapshot uploadSnapshot: snapshot.getChildren())
                           {
-                              Upload uploads = uploadSnapshot.getValue(Upload.class);
+                              Upload uploads = uploadSnapshot.child("uploads").getValue(Upload.class);
+                              System.out.println(uploads);
                               //uploads.setKey(uploadSnapshot.getKey());
                               uploadList.add(uploads);
                           }
+                          Log.d("upload",uploadList.size()+"");
 
                           adapter = new MyBookAdapter(getContext(),uploadList);
 
                           recview.setAdapter(adapter);
-                          bookLoadListener.onUploadLoadSuccess(uploadList);
+                          recview.setLayoutManager(new LinearLayoutManager(getContext()));
+//                          bookLoadListener.onUploadLoadSuccess(uploadList);
+
                       }
                       else
                           bookLoadListener.onUploadLoadFailure("Cant find uploads");
+
                     }
 
                     @Override
@@ -163,8 +230,8 @@ public class BookFragment extends Fragment implements IBookLoadListener, ICartLo
 
             bookLoadListener = this;
             cartLoadListener = this;
-            GridLayoutManager gridLayoutManager= new GridLayoutManager(this.getContext(),2);
-            recview.setLayoutManager(gridLayoutManager);
+            //GridLayoutManager gridLayoutManager= new GridLayoutManager(this.getContext(),2);
+            //recview.setLayoutManager(gridLayoutManager);
             recview.addItemDecoration(new SpaceItemDecoration());
 
             btnCart.setOnClickListener(view ->
@@ -231,7 +298,7 @@ public class BookFragment extends Fragment implements IBookLoadListener, ICartLo
                                         cartModel.setKey(cartSnapshot.getKey());
                                         cartModels.add(cartModel);
                                     }
-                                    cartLoadListener.onCartLoadSuccess(cartModels);
+                                    //cartLoadListener.onCartLoadSuccess(cartModels);
                                 }
 
                                 @Override

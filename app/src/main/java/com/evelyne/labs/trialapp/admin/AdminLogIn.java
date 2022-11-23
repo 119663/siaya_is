@@ -29,8 +29,8 @@ public class AdminLogIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_log_in);
 
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) final EditText passwordad = findViewById(R.id.passwordad);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) final EditText emailad= findViewById(R.id.emailaddressad);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) final EditText Pass = findViewById(R.id.passwordad);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) final EditText Phone= findViewById(R.id.emailaddressad);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) final Button loginBtnad = findViewById(R.id.loginad);
        // @SuppressLint({"MissingInflatedId", "LocalSuppress"}) final TextView registerBtnad = findViewById(R.id.registerad);
 
@@ -39,10 +39,10 @@ public class AdminLogIn extends AppCompatActivity {
         loginBtnad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String emailsptxt = emailad.getText().toString();
-                final String passwordsptxt = passwordad.getText().toString();
+                final String Phonetxt = Phone.getText().toString();
+                final String Passtxt= Pass.getText().toString();
 
-                if(emailsptxt.isEmpty() || passwordsptxt.isEmpty()){
+                if(Phonetxt.isEmpty() || Passtxt.isEmpty()){
                     Toast.makeText(AdminLogIn.this, "Please enter both Emailaddress and Password", Toast.LENGTH_SHORT).show();
 
                 } else {
@@ -50,12 +50,12 @@ public class AdminLogIn extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             // check if phone number exist in database
-                            if(snapshot.hasChild(emailsptxt)){
+                            if(snapshot.hasChild(Phonetxt)){
                                 // no exist in db
                                 //now get password of user from db and match
-                                final String getpasswordsp = snapshot.child(emailsptxt).child("password")
+                                final String getpasswordsp = snapshot.child(Phonetxt).child("Pass")
                                         .getValue(String.class);
-                                if(getpasswordsp.equals(passwordsptxt)){
+                                if(getpasswordsp.equals(Passtxt)){
                                     Toast.makeText(AdminLogIn.this,"LogIn Successful", Toast.LENGTH_SHORT).show();
 
                                     // open mainActivity on successful login

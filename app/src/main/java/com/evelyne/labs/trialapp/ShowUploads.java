@@ -84,8 +84,7 @@ private DatabaseReference mReference;
                             uploadList.add(upload);
                         }
                         //setup adapter
-                        adapterUploadSeller = new AdapterUploadSeller(
-                                uploadList);
+                        adapterUploadSeller = new AdapterUploadSeller(uploadList);
                         //set adapter
                         myUploads.setAdapter(adapterUploadSeller);
                     }

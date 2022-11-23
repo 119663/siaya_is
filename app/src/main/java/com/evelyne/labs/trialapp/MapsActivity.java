@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.evelyne.labs.trialapp.customer.BookNowActivity;
 import com.evelyne.labs.trialapp.model.BookNow;
 import com.evelyne.labs.trialapp.model.GpsUtils;
 import com.evelyne.labs.trialapp.model.User;
@@ -249,8 +250,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_location, null);
         Button btnValidateAddress = view.findViewById(R.id.btn_validate);
         btnValidateAddress.setOnClickListener(view1 -> {
-            Intent startloc = new Intent(MapsActivity.this, BookNow.class);
-            startActivity(startloc);
+            Intent intent = new Intent(MapsActivity.this, BookNowActivity.class);
+            startActivity(intent);
             finish();
         });
         //storing data in shared prefs

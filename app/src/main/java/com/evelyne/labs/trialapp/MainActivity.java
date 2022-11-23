@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.evelyne.labs.trialapp.admin.AdminLogIn;
+import com.evelyne.labs.trialapp.admin.AdminMenu;
 import com.evelyne.labs.trialapp.customer.SignUp;
 import com.evelyne.labs.trialapp.serviceprovider.SpLogIn;
 import com.evelyne.labs.trialapp.serviceprovider.SpSignUp;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         adminBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AdminLogIn.class);
+                Intent intent = new Intent(MainActivity.this, AdminMenu.class);
                 startActivity(intent);
             }
         });

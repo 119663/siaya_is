@@ -1,5 +1,6 @@
 package com.evelyne.labs.trialapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import com.evelyne.labs.trialapp.R;
+import com.evelyne.labs.trialapp.ShowUploads;
+import com.evelyne.labs.trialapp.serviceprovider.SpReportsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
@@ -26,6 +29,15 @@ public class ManageFragment extends Fragment {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_manage, container, false);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_manage,null);
+        managesp = (Button) root.findViewById(R.id.msp);
+        managesp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SpReportsActivity.class);
+                startActivity(intent);
+            }
+        });
+        return root;
     }
 }

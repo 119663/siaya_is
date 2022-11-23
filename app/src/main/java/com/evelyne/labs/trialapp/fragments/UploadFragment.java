@@ -27,6 +27,7 @@ import com.evelyne.labs.trialapp.ShowUploads;
 import com.evelyne.labs.trialapp.model.Upload;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -129,39 +130,53 @@ public class UploadFragment extends Fragment {
     }
     private void Uploadfile(){
         String timestamp = ""+System.currentTimeMillis();
-        if(imageUri !=null){
-           StorageReference filereference = mStorage.child(System.currentTimeMillis()
-           +"."+getFileExt(imageUri));
+//        if(imageUri !=null){
+//            StorageReference filereference = mStorage.child(System.currentTimeMillis()
+//                    +"."+getFileExt(imageUri));
+        if(imageUri ==null){
+            String filepathName = "profile_images/" + auth.getUid();
 
-           mUploadTask=filereference.putFile(imageUri)
+           StorageReference filereference = FirebaseStorage.getInstance().getReference(filepathName);
+
+           filereference.putFile(imageUri)
+//            mUploadTask=filereference.putFile(imageUri)
                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                        @Override
                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                          // String Uid = pid.getText().toString().trim();
-                          // String uid = ""+ds.getRef().getKey();
-                           HashMap<String,Object>hashMap = new HashMap<>();
-                           hashMap.put("uploadId", ""+timestamp);
-                           hashMap.put("timestamp", ""+timestamp);
-                           hashMap.put("uid", ""+auth.getUid());
-                           String CName = company.getText().toString().trim();
-                           String tCapacity = capacity.getText().toString().trim();
-                           String tPlate = plate.getText().toString().trim();
-                           String sPrice = price.getText().toString().trim();
+//                            String Uid = pid.getText().toString().trim();
+//                            String uid = ""+ds.getRef().getKey();
 
-                           HashMap uploadDetails = new HashMap();
-                          // uploadDetails.put("uid", Uid);
-                           uploadDetails.put("Company Name", CName);
-                           uploadDetails.put("Tank Capacity", tCapacity);
-                           uploadDetails.put("Number Plate", tPlate);
-                           uploadDetails.put("Service Price", sPrice);
-                           uploadDetails.put("IsProvider", true);
+                           Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                           while (!uriTask.isSuccessful()) ;
+                           Uri downloadImageUri = uriTask.getResult();
+                           if (uriTask.isSuccessful()) {
+                               HashMap<String, Object> hashMap = new HashMap<>();
+                               hashMap.put("uploadId", "" + timestamp);
+                               hashMap.put("timestamp", "" + timestamp);
+//                               hashMap.put("imageUri", "" + filereference);
+                               hashMap.put("uid", "" + auth.getUid());
+//                               String Image = imageUri.toString();
+                               String CName = company.getText().toString().trim();
+                               String tCapacity = capacity.getText().toString().trim();
+                               String tPlate = plate.getText().toString().trim();
+                               String sPrice = price.getText().toString().trim();
+
+                               HashMap uploadDetails = new HashMap();
+                               // uploadDetails.put("uid", Uid);
+                              // uploadDetails.put("imageUri", ""+downloadImageUri);
+//                               uploadDetails.put("imageUri",Image );
+                               uploadDetails.put("CompanyName", CName);
+                               uploadDetails.put("TankCapacity", tCapacity);
+                               uploadDetails.put("NumberPlate", tPlate);
+                               uploadDetails.put("ServicePrice", sPrice);
+                               uploadDetails.put("IsProvider", true);
 
 
-                           //upload to firestore
-                           /*mstore.collection("Services")
-                                   .document(auth.getCurrentUser().getUid())
-                                           .collection("my_services")
-                                   .document().set(uploadDetails);*/
+                               //upload to firestore
+                               mstore.collection("Services")
+                                       .document(auth.getCurrentUser().getUid())
+                                       .collection("my_services")
+                                       .document().set(uploadDetails);
 
 
 //                           Upload companyName = new Upload(company.getText().toString().trim()
@@ -173,10 +188,12 @@ public class UploadFragment extends Fragment {
 //                           Upload servicePrice = new Upload(price.getText().toString().trim()
 //                                   ,taskSnapshot.getUploadSessionUri().toString());
 //                           String uploadId = mReference.push().getKey();
-                           mReference.child("Providers").child(auth.getCurrentUser().getUid()).child("uploads").setValue(uploadDetails);
-                           progressBar.setVisibility(View.GONE);
-                           Toast.makeText(getContext(),"Upload Successful", Toast.LENGTH_LONG).show();
+                               mReference.child("Providers").child(auth.getCurrentUser().getUid()).child("uploads").setValue(uploadDetails);
+                               progressBar.setVisibility(View.GONE);
+                               Toast.makeText(getContext(), "Upload Successful", Toast.LENGTH_LONG).show();
+                           }
                        }
+
                    })
                    .addOnFailureListener(new OnFailureListener() {
                        @Override
@@ -192,8 +209,10 @@ public class UploadFragment extends Fragment {
                            //progressBar.getProgress((int)progress);
                        }
                    });
+
         }else{
-            Toast.makeText(getContext(),"No File Selected", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Upload File", Toast.LENGTH_LONG).show();
         }
+
     }
 }

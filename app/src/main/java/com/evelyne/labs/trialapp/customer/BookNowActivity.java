@@ -1,5 +1,6 @@
 package com.evelyne.labs.trialapp.customer;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -19,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.evelyne.labs.trialapp.CustomerOrderDetails;
+import com.evelyne.labs.trialapp.MapsActivity;
 import com.evelyne.labs.trialapp.R;
 import com.evelyne.labs.trialapp.fragments.BookFragment;
 import com.evelyne.labs.trialapp.listeners.ICartLoadListener;
@@ -58,10 +61,19 @@ public class BookNowActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_now);
         final EditText capacity  = findViewById(R.id.capacity);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) final EditText location= findViewById(R.id.locationBook);
         final EditText date  = findViewById(R.id.date);
         final EditText time  = findViewById(R.id.time);
         final Button book = findViewById(R.id.book);
         final Button back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent( BookNowActivity.this, CustomerOrderDetails.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         auth = FirebaseAuth.getInstance();
         mReference = FirebaseDatabase.getInstance().getReference();
 
@@ -79,6 +91,7 @@ public class BookNowActivity extends AppCompatActivity  {
                                                     @Override
                                                     public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
                                                         time.setText(sHour + ":" + sMinute);
+
                                                     }
                                                 }, hour, minutes, true);
                                         timepicker.show();
@@ -109,10 +122,11 @@ public class BookNowActivity extends AppCompatActivity  {
 
             //get data from edits
             final String capacitytxt = capacity.getText().toString();
-           // final String datetxt = date.getText().toString();
-            // String timetxt = time.setText("Selected Date");
-            date.setText("Selected Date: ");
-            time.setText("Selected Time");
+            final String locationtxt = location.getText().toString();
+            final String timetxt = time.getText().toString();
+            final String datetxt = time.getText().toString();
+//            date.setText("Selected Date: ");
+//            time.setText("Selected Time");
 
             String saveCurrentTime, saveCurrentDate;
             Calendar calendar = Calendar.getInstance();
@@ -124,10 +138,9 @@ public class BookNowActivity extends AppCompatActivity  {
             saveCurrentTime = currentTime.format(calendar.getTime());
 
             //check if user fills all fields before sending data to firebase
-            if(capacitytxt.isEmpty() || date.isImportantForAutofill() ||time.isImportantForAutofill()
+            if(capacitytxt.isEmpty()||locationtxt.isEmpty()
                    ){
-                Toast.makeText(BookNowActivity.this, "Please fill all fields", Toast.LENGTH_SHORT
-                ).show();
+                Toast.makeText(BookNowActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 // check if passwords are matching
             }
             else {
@@ -141,20 +154,21 @@ public class BookNowActivity extends AppCompatActivity  {
                            hashMap.put("timestamp", ""+timestamp);
                            hashMap.put("uid", ""+auth.getUid());
                             String capacitytxt = capacity.getText().toString().trim();
-                           // final String datetxt = date.getText().toString();
+                            String locationtxt = location.getText().toString();
                            String timetxt = time.getText().toString().trim();
                            String datetxt = date.getText().toString().trim();
-                           date.setText("Selected Date: ") ;
-                           time.setText("Selected Time");
+//                           date.setText("Selected Date: ") ;
+//                           time.setText("Selected Time");
 
                            HashMap uploadBookNow = new HashMap();
                            // uploadDetails.put("uid", Uid);
                          //  uploadBookNow.put("Company Name", CName);
-                           uploadBookNow.put("Tank Capacity", capacitytxt);
-                           uploadBookNow.put("Booking date", date);
-                           uploadBookNow.put("Booking time", time);
-                           uploadBookNow.put("Booking date", datetxt);
-                           uploadBookNow.put("Booking time", timetxt);
+                           uploadBookNow.put("TankCapacity", capacitytxt);
+                           uploadBookNow.put("Location", locationtxt);
+//                           uploadBookNow.put("Booking date", date);
+//                           uploadBookNow.put("Booking time", time);
+                           uploadBookNow.put("Bookingdate", datetxt);
+                           uploadBookNow.put("Bookingtime", timetxt);
                            uploadBookNow.put("IsUser", true);
                           //phone number is unique identifier so comes under all other details
                            /*databaseReference.child("book").child("capacity").setValue(capacitytxt);
@@ -167,8 +181,8 @@ public class BookNowActivity extends AppCompatActivity  {
                            mReference.child("Users").child(auth.getCurrentUser().getUid()).child("cart").child("book").child(timestamp).setValue(uploadBookNow);
 
                          //show success message and finish ativity
-                  Toast.makeText(BookNowActivity.this, "User successfully registered", Toast.LENGTH_SHORT).show();
-                  startActivity(new Intent(BookNowActivity.this, SpLogIn.class));
+                  Toast.makeText(BookNowActivity.this, "Booking successfully made", Toast.LENGTH_SHORT).show();
+                  startActivity(new Intent(BookNowActivity.this, CustomerOrderDetails.class));
        finish();
 
                    }

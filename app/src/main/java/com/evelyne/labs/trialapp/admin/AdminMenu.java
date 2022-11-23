@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.evelyne.labs.trialapp.R;
 import com.evelyne.labs.trialapp.fragments.AppointmentsFragment;
+import com.evelyne.labs.trialapp.fragments.ManageFragment;
 import com.evelyne.labs.trialapp.fragments.UploadFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -40,7 +41,7 @@ public class AdminMenu extends AppCompatActivity {
 
                     switch (item.getItemId()) {
                         case R.id.nav_manage:
-                            selectedFragment = new UploadFragment();
+                            selectedFragment = new ManageFragment();
                             break;
                         case R.id.nav_reports:
                             selectedFragment = new AppointmentsFragment();

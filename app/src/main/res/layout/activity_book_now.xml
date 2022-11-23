@@ -20,13 +20,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/capacity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Septic Tank Capacity"
         android:layout_below="@id/textView"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:inputType="text"
+        />
+    <EditText
+        android:id="@+id/locationBook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Location"
+        android:layout_below="@id/capacity"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/black"
@@ -44,7 +55,7 @@
         android:layout_marginBottom="10dp"
         android:ems="10"
         android:inputType="date"
-        android:layout_below="@id/capacity"
+        android:layout_below="@id/locationBook"
         android:hint="Date"
         />
     <EditText

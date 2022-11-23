@@ -17,5 +17,15 @@ public class CustomerOrderDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_order_details);
+
+        orderBackBtn = findViewById(R.id.orderBackBtn);
+        bookDateTv = findViewById(R.id.bookDateTv);
+        bookIdTv = findViewById(R.id.bookIdTv);
+        bookStatusTv = findViewById(R.id.bookStatusTv);
+        bookCompanyTv = findViewById(R.id.bookCompanyTv);
+        bookBookingsTv = findViewById(R.id.bookBookingsTv);
+        bookAmountTv = findViewById(R.id.bookAmountTv);
+        bookAddressTv = findViewById(R.id.bookAddressTv);
+        itemsRv = findViewById(R.id.itemsRv);
     }
 }
